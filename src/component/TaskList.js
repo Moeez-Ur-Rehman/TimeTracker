@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import AddTask from './AddTask';
+import { v4 as uuidv4 } from 'uuid'; // Use uuid for unique task ids
 
 function TaskList() {
   const [tasks, setTasks] = useState([]);
@@ -7,13 +8,14 @@ function TaskList() {
   const [filter, setFilter] = useState('all');
 
   const handleAddTask = (taskTitle) => {
-    const newTask = { title: taskTitle, completed: false };
+    const newTask = { id: uuidv4(), title: taskTitle, completed: false };
     setTasks([...tasks, newTask]);
   };
 
-  const markTaskComplete = (index) => {
-    const updatedTasks = [...tasks];
-    updatedTasks[index].completed = true;
+  const markTaskComplete = (id) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, completed: true } : task
+    );
     setTasks(updatedTasks);
   };
 
@@ -34,7 +36,7 @@ function TaskList() {
 
   return (
     <div className="container mx-auto p-4 min-h-screen bg-gray-100 flex flex-col items-center md:w-3/4 sm:w-full">
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Task Tracker Lite</h1>
+      {<h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Task Manager</h1>}
 
       {/* Add Task Form */}
       <AddTask onAdd={handleAddTask} />
@@ -82,9 +84,9 @@ function TaskList() {
 
       {/* Task List */}
       <ul className="w-full mt-6 space-y-4 max-w-sm md:max-w-md">
-        {filteredTasks.map((task, index) => (
+        {filteredTasks.map((task) => (
           <li
-            key={index}
+            key={task.id}
             className="p-4 bg-white rounded-md shadow-md flex justify-between items-center border border-gray-200"
           >
             <span className={`${task.completed ? 'text-gray-400 line-through' : 'text-gray-800'} break-words`}>
@@ -93,7 +95,7 @@ function TaskList() {
             {!task.completed ? (
               <button
                 className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-md transition duration-300"
-                onClick={() => markTaskComplete(index)}
+                onClick={() => markTaskComplete(task.id)}
               >
                 Complete
               </button>
@@ -103,6 +105,9 @@ function TaskList() {
           </li>
         ))}
       </ul>
+      
+      
+      
     </div>
   );
 }
