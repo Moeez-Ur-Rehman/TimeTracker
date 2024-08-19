@@ -1,20 +1,32 @@
 import { useState } from 'react';
 import AddTask from './AddTask';
-import { v4 as uuidv4 } from 'uuid'; // Use uuid for unique task ids
+import { v4 as uuidv4 } from 'uuid'; // For unique task ids
 
 function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState('all');
 
-  const handleAddTask = (taskTitle) => {
-    const newTask = { id: uuidv4(), title: taskTitle, completed: false };
+  const handleAddTask = (task) => {
+    const newTask = { 
+      id: uuidv4(), 
+      title: task.title, 
+      dueDate: task.dueDate, 
+      completed: false, 
+      completedAt: null 
+    };
     setTasks([...tasks, newTask]);
   };
 
   const markTaskComplete = (id) => {
     const updatedTasks = tasks.map((task) =>
-      task.id === id ? { ...task, completed: true } : task
+      task.id === id 
+        ? { 
+            ...task, 
+            completed: true, 
+            completedAt: new Date().toLocaleString() 
+          } 
+        : task
     );
     setTasks(updatedTasks);
   };
@@ -36,7 +48,7 @@ function TaskList() {
 
   return (
     <div className="container mx-auto p-4 min-h-screen bg-gray-100 flex flex-col items-center md:w-3/4 sm:w-full">
-      {<h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Task Manager</h1>}
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Task Manager</h1>
 
       {/* Add Task Form */}
       <AddTask onAdd={handleAddTask} />
@@ -89,9 +101,15 @@ function TaskList() {
             key={task.id}
             className="p-4 bg-white rounded-md shadow-md flex justify-between items-center border border-gray-200"
           >
-            <span className={`${task.completed ? 'text-gray-400 line-through' : 'text-gray-800'} break-words`}>
-              {task.title}
-            </span>
+            <div className="flex flex-col">
+              <span className={`${task.completed ? 'text-gray-400 line-through' : 'text-gray-800'} break-words`}>
+                {task.title}
+              </span>
+              <span className="text-sm text-gray-500">Due date: {task.dueDate}</span>
+              {task.completed && task.completedAt && (
+                <span className="text-xs text-gray-400">Completed at: {task.completedAt}</span>
+              )}
+            </div>
             {!task.completed ? (
               <button
                 className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-md transition duration-300"
@@ -105,9 +123,6 @@ function TaskList() {
           </li>
         ))}
       </ul>
-      
-      
-      
     </div>
   );
 }
