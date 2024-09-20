@@ -93,7 +93,7 @@ function TaskList() {
   };
 
   return (
-    <div className="container mx-auto p-4 min-h-screen bg-gray-100 flex flex-col items-center md:w-3/4 sm:w-full">
+    <div className="container mx-auto p-4 min-h-screen justify-center bg-gray-100 flex flex-col items-center md:w-3/4 sm:w-full">
       <div className="flex justify-center items-center">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Task Manager</h1>
       </div>
