@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Login({ onLogin }) {
@@ -8,9 +8,14 @@ function Login({ onLogin }) {
   const [loading, setLoading] = useState(false); // To handle loading state
   const navigate=useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL
+  useEffect(()=>{
+    if (localStorage.getItem('authToken') !== null) {
+        navigate('/tasks', { replace: true });
+      }
+},[navigate])
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+  
     // Basic client-side validation
     if (!email || !password) {
       setError('Both fields are required');

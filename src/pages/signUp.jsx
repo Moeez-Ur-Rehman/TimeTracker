@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios'; // To send HTTP requests to the backend
 import { useNavigate } from 'react-router-dom';
 
@@ -9,9 +9,15 @@ function SignUp({ onSignUp }) {
   const [error, setError] = useState('');
    const navigate=useNavigate();
    const apiUrl = process.env.REACT_APP_API_URL
+   useEffect(()=>{
+    if (localStorage.getItem('authToken') !== null) {
+        navigate('/tasks', { replace: true });
+      }
+},[navigate])
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
+    
     // Check if passwords match
     if (password !== confirmPassword) {
       setError('Passwords do not match');

@@ -1,7 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
+import React ,{useEffect}from 'react';
+import { Link,useNavigate } from 'react-router-dom';
 const Home = () => {
+    const  navigate=useNavigate()
+    useEffect(()=>{
+        if (localStorage.getItem('authToken') !== null) {
+            navigate('/tasks', { replace: true });
+          }
+    },[navigate])
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
       <h2 className="text-4xl font-bold mb-4">Welcome to Task Tracker Lite</h2>
