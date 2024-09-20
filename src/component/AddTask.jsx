@@ -4,16 +4,26 @@ function AddTask({ onAdd }) {
   const [title, setTitle] = useState('');
   const [dueDate, setDueDate] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!title || !dueDate) {
-      alert('Please fill out all fields.');
-      return;
-    }
-    onAdd({ title, dueDate });
+const [isSubmitting, setIsSubmitting] = useState(false);
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!title || !dueDate) {
+    alert('Please fill out all fields.');
+    return;
+  }
+  setIsSubmitting(true);
+  try {
+    await onAdd({ title, dueDate });
     setTitle('');
     setDueDate('');
-  };
+  } catch (error) {
+    alert('Error adding task.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   return (
     <div className="bg-white p-6 rounded-md shadow-md mb-6">
@@ -47,11 +57,13 @@ function AddTask({ onAdd }) {
           />
         </div>
         <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition duration-300"
+        type="submit"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition duration-300"
+        disabled={isSubmitting}
         >
-          Add Task
+        {isSubmitting ? 'Adding...' : 'Add Task'}
         </button>
+
       </form>
     </div>
   );

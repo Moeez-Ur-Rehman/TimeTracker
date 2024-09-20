@@ -1,24 +1,70 @@
 import React, { useState } from 'react';
-
-
+import { useNavigate } from 'react-router-dom';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false); // To handle loading state
+  const navigate=useNavigate();
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Basic client-side validation
     if (!email || !password) {
       setError('Both fields are required');
       return;
     }
+
     if (password.length < 6) {
       setError('Password must be at least 6 characters long');
       return;
     }
+
+    // Reset error message
     setError('');
-    onLogin(email);
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }), // Send email and password to backend
+      });
+
+      const data = await response.json();
+      
+      setLoading(false);
+
+      if (!response.ok) {
+        // If the backend returns an error, display it
+        setError(data.message || 'Error logging in');
+        return;
+      }
+
+      // Assuming the backend sends a token upon successful login
+      const { token } = data;
+
+      // Store the token in localStorage or sessionStorage
+      if(token)
+        {
+        localStorage.setItem('authToken', token);
+        console.log(token);
+        navigate("/tasks");
+        }
+      else{
+        setError('something is wrong')
+      }
+      
+      // Notify parent component that login was successful
+      //onLogin(email);
+    } catch (err) {
+      setLoading(false);
+      setError('Error logging in. Please try again later.');
+      console.error('Login error:', err);
+    }
   };
 
   return (
@@ -58,10 +104,10 @@ function Login({ onLogin }) {
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition duration-300 mb-4"
+            disabled={loading}
           >
-            Login
+            {loading ? 'Logging in...' : 'Login'}
           </button>
-          
         </form>
       </div>
     </div>
