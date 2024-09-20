@@ -7,6 +7,7 @@ function Login({ onLogin }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false); // To handle loading state
   const navigate=useNavigate();
+  const apiUrl = process.env.REACT_APP_API_URL
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -26,7 +27,7 @@ function Login({ onLogin }) {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

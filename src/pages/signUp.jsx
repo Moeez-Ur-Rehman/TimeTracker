@@ -8,6 +8,7 @@ function SignUp({ onSignUp }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
    const navigate=useNavigate();
+   const apiUrl = process.env.REACT_APP_API_URL
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -21,7 +22,7 @@ function SignUp({ onSignUp }) {
       // Make POST request to your backend to sign up the user
 
     console.log("called")
-      const response = await axios.post('/api/auth/signup', {
+      const response = await axios.post(`${apiUrl}/api/auth/signup`, {
         email,
         password,
       });

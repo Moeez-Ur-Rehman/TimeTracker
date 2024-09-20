@@ -4,17 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // To handle API requests
 import { MdDelete } from "react-icons/md";
 
+
 function TaskList() {
   const [tasks, setTasks] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState('all');
   const navigate = useNavigate();
-
+  const apiUrl = process.env.REACT_APP_API_URL
+  
   useEffect(() => {
     const fetchTasks = async () => {
       const token = localStorage.getItem('authToken');
       try {
-        const { data } = await axios.get('/api/tasks', {
+        const { data } = await axios.get(`${apiUrl}/api/tasks`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTasks(data);
@@ -35,7 +37,7 @@ function TaskList() {
     const token = localStorage.getItem('authToken');
     try {
       const { data: newTask } = await axios.post(
-        '/api/tasks',
+        `${apiUrl}/api/tasks`,
         { title: task.title, dueDate: task.dueDate },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -49,7 +51,7 @@ function TaskList() {
     const token = localStorage.getItem('authToken');
     try {
       const { data: updatedTask } = await axios.put(
-        `/api/tasks/${id}`,
+        `${apiUrl}/api/tasks/${id}`,
         { completed: true },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -65,7 +67,7 @@ function TaskList() {
   const deleteTask = async (id) => {
     const token = localStorage.getItem('authToken');
     try {
-      await axios.delete(`/api/tasks/${id}`, {
+      await axios.delete(`${apiUrl}/api/tasks/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const updatedTasks = tasks.filter((task) => task._id !== id);
