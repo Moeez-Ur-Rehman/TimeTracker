@@ -6,11 +6,12 @@ import Login from '../pages/login';
 import TaskList from '../pages/taskList';
 import SignUp from '../pages/signUp';
 import Home from '../pages/home';
-import Header from '../component/navbar';
+import Navbar from '../component/navbar';
+//import Header from '../component/navbar';
 const RouteConfig = () => {
   return (
     <>
-      <Header /> {/* No need for Router here */}
+      <Navbar/> {/* No need for Router here */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
