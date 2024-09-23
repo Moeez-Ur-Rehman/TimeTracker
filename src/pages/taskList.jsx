@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AddTask from '../component/addTask';
+import AddTask from '../component/AddTask';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // To handle API requests
 import { MdDelete } from "react-icons/md";
@@ -26,6 +26,7 @@ function TaskList() {
     };
 
     fetchTasks();
+    // eslint-disable-next-line
   }, []); // Only run once on component mount
 
   const handleLogout = () => {
