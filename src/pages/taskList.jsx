@@ -83,7 +83,10 @@ function TaskList() {
     if (filter === 'incomplete') return !task.completed;
     return true;
   });
-
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -151,9 +154,9 @@ function TaskList() {
               <span className={`${task.completed ? 'text-gray-400 line-through' : 'text-gray-800'} break-words`}>
                 {task.title}
               </span>
-              <span className="text-sm text-gray-500">Due date: {task.dueDate}</span>
+              <span className="text-sm text-gray-500">Due date: {formatDate(task.dueDate)}</span>
               {task.completed && task.completedAt && (
-                <span className="text-xs text-gray-400">Completed at: {task.completedAt}</span>
+                <span className="text-xs text-gray-400">Completed at: {formatDate(task.completedAt)}</span>
               )}
             </div>
             <div className="flex gap-2">
