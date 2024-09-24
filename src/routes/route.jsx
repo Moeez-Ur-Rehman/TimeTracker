@@ -6,7 +6,7 @@ import Login from '../pages/login';
 import TaskList from '../pages/taskList';
 import SignUp from '../pages/signUp';
 import Home from '../pages/home';
-import Navbar from '../component/Navbar';
+import Navbar from '../component/Header';
 const RouteConfig = () => {
   return (
     <>
